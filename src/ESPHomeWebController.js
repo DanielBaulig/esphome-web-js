@@ -73,7 +73,6 @@ class ESPHomeWebEntityUpdateEvent extends CustomEvent {
 class ESPHomeWebController extends EventTarget {
   connected = false;
   data = {};
-  onentityupdate = null;
 
   constructor(host) {
     super();

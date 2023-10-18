@@ -1,0 +1,22 @@
+{
+  "name": "esphome-web",
+  "private": true,
+  "version": "0.0.1",
+  "description": "An implemenation of the ESPhome web server API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "esphome",
+    "web",
+    "home",
+    "assistant",
+    "esp32",
+    "esp8266",
+    "home",
+    "automation"
+  ],
+  "author": "Daniel Baulig",
+  "license": "MIT"
+}
