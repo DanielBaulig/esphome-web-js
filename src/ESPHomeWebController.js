@@ -1,83 +1,19 @@
-class ESPHomeWebEntity {
-  constructor(controller, data) {
-    this.controller = controller;
-    this.id = data.id;
-    this.data = data;
-  }
+import EventSource from './EventSource';
+import createESPHomeWebEntity from './entities/createESPHomeWebEntity'
 
-  update(data) {
-    this.data = data;
-  }
-
-  getPostURL(action) {
-    const [type, id] = this.id.split('-');
-    return `/${type}/${id}/${action}`;
-  }
-}
-
-function createESPHomeWebEntity(controller, data) {
-  const [type,] = data.id.split('-');
-  if (!type) {
-    throw new Error(`Cant determine entity type from ${data.id}`);
-  }
-
-  switch (type) {
-    case 'light':
-      return new ESPHomeWebLightEntity(controller, data);
-    default:
-      console.warn(`Unknown entity type ${type}. Creating untyped entity for id ${data.id}`);
-      return new ESPHomeWebEntity(controller, data);
-  }
-
-}
-
-function filterObject(o) {
-  return Object.fromEntries(
-    Object.entries(o).filter(
-      ([k, v]) => v !== undefined
-    )
-  );
-}
-
-class ESPHomeWebLightEntity extends ESPHomeWebEntity {
-  constructor(controller, data) {
-    super(controller, data);
-  }
-
-  turnOn({brightness, r, g, b, white_value, flash, transition, effect, color_temp} = {}) {
-    const query = filterObject({
-      brightness, r, g, b, white_value, flash, transition, effect, color_temp
-    });
-
-    this.controller.post(this.getPostURL('turn_on'), query);
-  }
-
-  turnOff({transition} = {}) {
-    const query = filterObject({
-      transition
-    });
-    this.controller.post(this.getPostURL('turn_off'), query);
-  }
-
-  toggle() {
-    this.controller.post(this.getPostURL('toggle'));
-  }
-}
-
-class ESPHomeWebEntityUpdateEvent extends CustomEvent {
+export class ESPHomeWebEntityUpdateEvent extends CustomEvent {
   constructor(entity) {
     super('entityupdate', {detail: {entity}});
   }
 }
 
-class ESPHomeWebController extends EventTarget {
+export default class Controller extends EventTarget {
   connected = false;
-  data = {};
+  entities = {};
 
   constructor(host) {
     super();
     this.host = host;
-    this.entities = {};
   }
 
   connect() {
@@ -91,9 +27,9 @@ class ESPHomeWebController extends EventTarget {
     this.connecting = true;
   }
 
-  post(path, query) {
+  async post(path, query) {
     if (!this.connected) {
-      throw new Error('ESPHomeWebController not connected. Please establish a connection first');
+      throw new Error('ESPHomeWebController not connected. Please establish a connection first.');
     }
 
     const url = new URL(path, `http://${this.host}`);
@@ -142,5 +78,3 @@ class ESPHomeWebController extends EventTarget {
     this.disconnect();
   }
 }
-
-export default ESPHomeWebController;
