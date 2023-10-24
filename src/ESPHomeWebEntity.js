@@ -1,4 +1,4 @@
-function splitEntityTypeAndName(id) {
+export function splitEntityTypeAndName(id) {
   return id.split('-');
 }
   
