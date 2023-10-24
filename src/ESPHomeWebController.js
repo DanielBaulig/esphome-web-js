@@ -71,7 +71,7 @@ export default class Controller extends EventTarget {
     this.eventSource = null;
     this.connected = false;
     this.connecting = false;
-    console.info(`Disconnected from ${this.host}`);
+    console.debug(`Disconnected from ${this.host}`);
   }
 
   destroy() {
