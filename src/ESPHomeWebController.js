@@ -7,6 +7,13 @@ export class ESPHomeWebEntityUpdateEvent extends CustomEvent {
   }
 }
 
+export class ESPHomeWebEntityDiscoveredEvent extends CustomEvent {
+  constructor(entity) {
+    super('entitydiscovered', {detail: {entity}});
+  }
+}
+
+
 export default class Controller extends EventTarget {
   connected = false;
   entities = {};
@@ -40,12 +47,14 @@ export default class Controller extends EventTarget {
 
   _updateEntity(data) {
     const entity = data.id;
+    let event = null;
     if (entity in this.entities) {
       this.entities[entity].update(data);
+      event = new ESPHomeWebEntityUpdateEvent(this.entities[entity]);
     } else {
       this.entities[entity] = createESPHomeWebEntity(this, data);
+      event = new ESPHomeWebEntityDiscoveredEvent(this.entities[entity]);
     }
-    const event = new ESPHomeWebEntityUpdateEvent(this.entities[entity]);
     this.dispatchEvent(event);
   }
 

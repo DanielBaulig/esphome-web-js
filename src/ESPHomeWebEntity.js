@@ -1,4 +1,4 @@
-export function splitEntityTypeAndName(id) {
+function splitEntityTypeAndSlug(id) {
   return id.split('-');
 }
   
@@ -7,6 +7,7 @@ export default class ESPHomeWebEntity extends EventTarget {
     super();
     this.controller = controller;
     this.id = data.id;
+    [this.type , this.slug] = splitEntityTypeAndSlug(data.id);
     this.data = data;
   }
 
@@ -20,7 +21,6 @@ export default class ESPHomeWebEntity extends EventTarget {
   }
 
   getPostURL(action) {
-    const [type, name] = splitEntityTypeAndName(this.id);
-    return `/${type}/${name}/${action}`;
+    return `/${this.type}/${this.slug}/${action}`;
   }
 }
