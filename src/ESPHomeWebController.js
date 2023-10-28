@@ -13,7 +13,6 @@ export class ESPHomeWebEntityDiscoveredEvent extends CustomEvent {
   }
 }
 
-
 export default class Controller extends EventTarget {
   connected = false;
   entities = {};
