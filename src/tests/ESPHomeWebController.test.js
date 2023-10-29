@@ -32,6 +32,10 @@ function mockConfirmConnection(controller) {
   mockDispatch(controller.eventSource, new Event('open'));
 }
 
+function mockStateMessage(controller, state) {
+  mockDispatch(controller.eventSource, new MessageEvent('state', { data: JSON.stringify(state)}));
+}
+
 jest.unstable_mockModule('../fetch', () => {
   return {
     default: fetchMock,
@@ -76,11 +80,11 @@ test('it should create entities when it discovers new entities', () => {
   // Suppress the the debug message that receiving a state
   // message will trigger.
   jest.spyOn(console, 'debug').mockImplementation(() => {});
-  mockDispatch(controller.eventSource, new MessageEvent('state', { data: JSON.stringify({
+  mockStateMessage(controller, {
     id: entityId,
     value: 20,
     state: "20.0000",
-  })}));
+  });
   expect(controller.entities[entityId]).toBeDefined();
   expect(controller.entities[entityId].constructor.name).toBe('ESPHomeWebNumberEntity');
 });
