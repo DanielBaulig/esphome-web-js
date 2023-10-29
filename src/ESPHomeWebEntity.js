@@ -20,7 +20,15 @@ export default class ESPHomeWebEntity extends EventTarget {
     }));
   }
 
+  async refresh() {
+    return this.controller.get(this.getBaseURL());
+  }
+
+  getBaseURL() {
+    return `/${this.type}/${this.slug}`;
+  }
+
   getPostURL(action) {
-    return `/${this.type}/${this.slug}/${action}`;
+    return `${this.getBaseURL()}/${action}`;
   }
 }

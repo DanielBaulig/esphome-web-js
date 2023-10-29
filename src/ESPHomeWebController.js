@@ -1,4 +1,5 @@
 import EventSource from './EventSource';
+import fetch from './fetch';
 import createESPHomeWebEntity from './entities/createESPHomeWebEntity'
 
 export class ESPHomeWebEntityUpdateEvent extends CustomEvent {
@@ -42,6 +43,20 @@ export default class Controller extends EventTarget {
     url.search = new URLSearchParams(query).toString();
 
     return fetch(url, { method: 'POST' });
+  }
+
+  async get(path) {
+    const url = new URL(path, `http://${this.host}`);
+
+    const response = await fetch(url);
+    if (!response.ok) {
+      return response;
+    }
+
+    const json = await response.json();
+    this._updateEntity(json);
+
+    return response;
   }
 
   _updateEntity(data) {

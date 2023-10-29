@@ -1,1 +1,1 @@
-export default EventSource;
+export default globalThis.EventSource;

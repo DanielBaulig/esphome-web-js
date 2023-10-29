@@ -5,7 +5,7 @@
   "description": "An implemenation of the ESPhome web server API",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
     "flow": "flow"
   },
   "keywords": [
@@ -18,9 +18,11 @@
     "home",
     "automation"
   ],
+  "type": "module",
   "author": "Daniel Baulig",
   "license": "MIT",
   "devDependencies": {
-    "flow-bin": "^0.219.3"
+    "flow-bin": "^0.219.3",
+    "jest": "^29.7.0"
   }
 }
