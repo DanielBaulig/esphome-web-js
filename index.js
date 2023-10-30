@@ -1,1 +1,1 @@
-export { default as ESPHomeWebController } from './src/ESPHomeWebController.js';
+export { default as ESPHomeWebController } from './src/Controller.js';

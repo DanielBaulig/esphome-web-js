@@ -1,6 +1,6 @@
 import {jest, expect, test} from '@jest/globals';
 import {createController, getLastController} from '../../tests/helpers.js';
-import ESPHomeWebSelectEntity from '../ESPHomeWebSelectEntity';
+import SelectEntity from '../SelectEntity';
 
 const createData = jest.fn((extra = {}) => Object.assign({
   id: 'select-name',
@@ -9,12 +9,12 @@ const createData = jest.fn((extra = {}) => Object.assign({
   option: ['option 1', 'option 2'],
 }, extra));
 
-function createESPHomeWebSelectEntity({controller = createController(), data = createData()} = {}) {
-  return new ESPHomeWebSelectEntity(controller, data);
+function createSelectEntity({controller = createController(), data = createData()} = {}) {
+  return new SelectEntity(controller, data);
 }
 
 test('it should post to set when set is called', () =>{
-  const entity = createESPHomeWebSelectEntity();
+  const entity = createSelectEntity();
   const controller = getLastController();
   entity.set('option 2');
   expect(controller.post).toHaveBeenLastCalledWith(entity.getPostURL('set'), { option: 'option 2' });

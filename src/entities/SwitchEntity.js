@@ -1,6 +1,6 @@
-import ESPHomeWebEntity from '../ESPHomeWebEntity';
+import Entity from '../Entity';
 
-export default class ESPHomeWebSwitchEntity extends ESPHomeWebEntity {
+export default class SwitchEntity extends Entity {
   constructor(controller, data) {
     super(controller, data);
   }

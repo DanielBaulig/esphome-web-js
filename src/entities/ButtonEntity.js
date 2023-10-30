@@ -1,6 +1,6 @@
-import ESPHomeWebEntity from '../ESPHomeWebEntity'
+import Entity from '../Entity'
 
-export default class ESPHomeWebButtonEntity extends ESPHomeWebEntity {
+export default class ButtonEntity extends Entity {
   constructor(controller, data) {
     super(controller, data);
   }

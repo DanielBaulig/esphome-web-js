@@ -1,14 +1,14 @@
 import EventSource from './EventSource';
 import fetch from './fetch';
-import createESPHomeWebEntity from './entities/createESPHomeWebEntity'
+import createEntity from './entities/createEntity'
 
-export class ESPHomeWebEntityUpdateEvent extends CustomEvent {
+export class EntityUpdateEvent extends CustomEvent {
   constructor(entity) {
     super('entityupdate', {detail: {entity}});
   }
 }
 
-export class ESPHomeWebEntityDiscoveredEvent extends CustomEvent {
+export class EntityDiscoveredEvent extends CustomEvent {
   constructor(entity) {
     super('entitydiscovered', {detail: {entity}});
   }
@@ -36,7 +36,7 @@ export default class Controller extends EventTarget {
 
   async post(path, query) {
     if (!this.connected) {
-      throw new Error('ESPHomeWebController not connected. Please establish a connection first.');
+      throw new Error('Controller not connected. Please establish a connection first.');
     }
 
     const url = new URL(path, `http://${this.host}`);
@@ -64,10 +64,10 @@ export default class Controller extends EventTarget {
     let event = null;
     if (entity in this.entities) {
       this.entities[entity].update(data);
-      event = new ESPHomeWebEntityUpdateEvent(this.entities[entity]);
+      event = new EntityUpdateEvent(this.entities[entity]);
     } else {
-      this.entities[entity] = createESPHomeWebEntity(this, data);
-      event = new ESPHomeWebEntityDiscoveredEvent(this.entities[entity]);
+      this.entities[entity] = createEntity(this, data);
+      event = new EntityDiscoveredEvent(this.entities[entity]);
     }
     this.dispatchEvent(event);
   }

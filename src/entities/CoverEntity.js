@@ -1,7 +1,7 @@
-import ESPHomeWebEntity from '../ESPHomeWebEntity';
+import Entity from '../Entity';
 import filterObject from '../filterObject';
 
-export default class ESPHomeWebCoverEntity extends ESPHomeWebEntity {
+export default class CoverEntity extends Entity {
   constructor(controller, data) {
     super(controller, data);
   }

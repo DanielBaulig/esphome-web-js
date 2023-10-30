@@ -48,11 +48,11 @@ jest.unstable_mockModule('../EventSource', () => {
   };
 });
 
-const { default: ESPHomeWebController }  = await import('../ESPHomeWebController');
+const { default: Controller }  = await import('../Controller');
 
 const defaultHost = 'localhost';
 function createController(host = defaultHost) {
-  return new ESPHomeWebController(host);
+  return new Controller(host);
 }
 
 test('it should create an event source connection', () => {
@@ -86,7 +86,7 @@ test('it should create entities when it discovers new entities', () => {
     state: "20.0000",
   });
   expect(controller.entities[entityId]).toBeDefined();
-  expect(controller.entities[entityId].constructor.name).toBe('ESPHomeWebNumberEntity');
+  expect(controller.entities[entityId].constructor.name).toBe('NumberEntity');
 });
 
 test('it should send a post request when post is called', async () => {

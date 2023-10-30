@@ -1,6 +1,6 @@
-import ESPHomeWebEntity from '../ESPHomeWebEntity'
+import Entity from '../Entity'
 
-export default class ESPHomeWebNumberEntity extends ESPHomeWebEntity {
+export default class NumberEntity extends Entity {
   constructor(controller, data) {
     super(controller, data);
   }

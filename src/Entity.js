@@ -2,7 +2,7 @@ function splitEntityTypeAndSlug(id) {
   return id.split('-');
 }
   
-export default class ESPHomeWebEntity extends EventTarget {
+export default class Entity extends EventTarget {
   constructor(controller, data) {
     super();
     this.controller = controller;
