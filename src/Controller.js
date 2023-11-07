@@ -79,7 +79,6 @@ export default class Controller extends EventTarget {
   }
 
   _onEventSourceStateMessage = (event) => {
-    console.debug(`EventSource Message: ${event.data}`);
     const json = JSON.parse(event.data);
     this._updateEntity(json);
   }
@@ -94,7 +93,6 @@ export default class Controller extends EventTarget {
     this.eventSource = null;
     this.connected = false;
     this.connecting = false;
-    console.debug(`Disconnected from ${this.host}`);
   }
 
   destroy() {
