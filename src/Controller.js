@@ -28,8 +28,9 @@ export default class Controller extends EventTarget {
       return;
     }
     const eventSource = new EventSource(`http://${this.host}/events`);
-    eventSource.addEventListener("state", this._onEventSourceStateMessage);
-    eventSource.addEventListener("open", this._onEventSourceConnected);
+    eventSource.addEventListener("state", this.#onEventSourceStateMessage);
+    eventSource.addEventListener("open", this.#onEventSourceConnected);
+    eventSource.addEventListener("error", this.#onEventSourceError);
     this.eventSource = eventSource;
     this.connecting = true;
   }
@@ -54,12 +55,12 @@ export default class Controller extends EventTarget {
     }
 
     const json = await response.json();
-    this._updateEntity(json);
+    this.#updateEntity(json);
 
     return response;
   }
 
-  _updateEntity(data) {
+  #updateEntity(data) {
     const entity = data.id;
     let event = null;
     if (entity in this.entities) {
@@ -72,15 +73,20 @@ export default class Controller extends EventTarget {
     this.dispatchEvent(event);
   }
 
-  _onEventSourceConnected = (event) => {
+  #onEventSourceConnected = (event) => {
     this.connecting = false;
     this.connected = true;
     this.dispatchEvent(new Event('connected'));
   }
 
-  _onEventSourceStateMessage = (event) => {
+  #onEventSourceStateMessage = (event) => {
     const json = JSON.parse(event.data);
-    this._updateEntity(json);
+    this.#updateEntity(json);
+  }
+
+  #onEventSourceError = (event) => {
+    this.disconnect();
+    this.dispatchEvent(new Event('error'));
   }
 
   disconnect() {
@@ -88,7 +94,9 @@ export default class Controller extends EventTarget {
       return;
     }
     const eventSource = this.eventSource;
-    eventSource.removeEventListener("state", this._onEventSourceStateMessage);
+    eventSource.removeEventListener("state", this.#onEventSourceStateMessage);
+    eventSource.removeEventListener("open", this.#onEventSourceConnected);
+    eventSource.removeEventListener("error", this.#onEventSourceError);
     eventSource.close();
     this.eventSource = null;
     this.connected = false;
