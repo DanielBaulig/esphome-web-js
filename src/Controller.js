@@ -17,10 +17,12 @@ export class EntityDiscoveredEvent extends CustomEvent {
 export default class Controller extends EventTarget {
   connected = false;
   entities = {};
+  #fetchOptions = null;
 
-  constructor(host) {
+  constructor(host, fetchOptions = {}) {
     super();
     this.host = host;
+    this.#fetchOptions = Object.assign({}, fetchOptions);
   }
 
   connect() {
@@ -35,6 +37,10 @@ export default class Controller extends EventTarget {
     this.connecting = true;
   }
 
+  #fetch(url, fetchOptions = {}) {
+    return fetch(url, Object.assign({}, this.#fetchOptions, fetchOptions));
+  }
+
   async post(path, query) {
     if (!this.connected) {
       throw new Error('Controller not connected. Please establish a connection first.');
@@ -43,13 +49,13 @@ export default class Controller extends EventTarget {
     const url = new URL(path, `http://${this.host}`);
     url.search = new URLSearchParams(query).toString();
 
-    return fetch(url, { method: 'POST' });
+    return this.#fetch(url, { method: 'POST' });
   }
 
   async get(path) {
     const url = new URL(path, `http://${this.host}`);
 
-    const response = await fetch(url);
+    const response = await this.#fetch(url);
     if (!response.ok) {
       return response;
     }

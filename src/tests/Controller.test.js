@@ -89,28 +89,33 @@ test('it should create entities when it discovers new entities', () => {
   expect(controller.entities[entityId].constructor.name).toBe('NumberEntity');
 });
 
-test('it should send a post request when post is called', async () => {
-  const controller = createController();
-  controller.connect();
-  mockConfirmConnection(controller);
+describe('run in sequence', () => {
+  test('it should send a get request and update the entity when get is called', async () => {
+    const controller = createController();
+    controller.connect();
+    mockConfirmConnection(controller);
 
-  await controller.post('/type/name/verb');
-  expect(fetchMock).toHaveBeenLastCalledWith(new URL(`http://${defaultHost}/type/name/verb`), { method: 'POST' });
-})
+    const data = {id: 'type-name'};
+    mockFetchResponse(JSON.stringify(data));
+    // Suppress the console.warn that will get triggered for using an 
+    // unknown type.
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
 
-test('it should send a get request and update the entity when get is called', async () => {
-  const controller = createController();
-  controller.connect();
-  mockConfirmConnection(controller);
-
-  const data = {id: 'type-name'};
-  mockFetchResponse(JSON.stringify(data));
-  // Suppress the console.warn that will get triggered for using an 
-  // unknown type.
-  jest.spyOn(console, 'warn').mockImplementation(() => {});
-
-  await controller.get('/type/name');
-  expect(fetchMock).toHaveBeenLastCalledWith(new URL(`http://${defaultHost}/type/name`));
-  expect(controller.entities['type-name']).toBeDefined();
-  expect(controller.entities['type-name'].data).toEqual(data);
+    await controller.get('/type/name');
+    expect(fetchMock).toHaveBeenLastCalledWith(new URL(`http://${defaultHost}/type/name`), {});
+    expect(controller.entities['type-name']).toBeDefined();
+    expect(controller.entities['type-name'].data).toEqual(data);
+  });
 });
+
+describe('run in sequence', () => {
+  test('it should send a post request when post is called', async () => {
+    const controller = createController();
+    controller.connect();
+    mockConfirmConnection(controller);
+
+    await controller.post('/type/name/verb');
+    expect(fetchMock).toHaveBeenLastCalledWith(new URL(`http://${defaultHost}/type/name/verb`), { method: 'POST' });
+  })
+});
+
