@@ -36,23 +36,11 @@ function mockStateMessage(controller, state) {
   mockDispatch(controller.eventSource, new MessageEvent('state', { data: JSON.stringify(state)}));
 }
 
-jest.unstable_mockModule('../fetch', () => {
-  return {
-    default: fetchMock,
-  };
-});
-
-jest.unstable_mockModule('../EventSource', () => {
-  return {
-    default: EventSourceMock,
-  };
-});
-
 const { default: Controller }  = await import('../Controller');
 
 const defaultHost = 'localhost';
 function createController(host = defaultHost) {
-  return new Controller(host);
+  return new Controller(host, {CustomEventSource: EventSourceMock, customFetch: fetchMock});
 }
 
 test('it should create an event source connection', () => {
@@ -102,7 +90,7 @@ describe('run in sequence', () => {
     jest.spyOn(console, 'warn').mockImplementation(() => {});
 
     await controller.get('/type/name');
-    expect(fetchMock).toHaveBeenLastCalledWith(new URL(`http://${defaultHost}/type/name`), {});
+    expect(fetchMock).toHaveBeenLastCalledWith(new URL(`http://${defaultHost}/type/name`));
     expect(controller.entities['type-name']).toBeDefined();
     expect(controller.entities['type-name'].data).toEqual(data);
   });

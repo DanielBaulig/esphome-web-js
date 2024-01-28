@@ -1,4 +1,3 @@
-import EventSource from './EventSource';
 import fetch from './fetch';
 import createEntity from './entities/createEntity'
 
@@ -17,28 +16,26 @@ export class EntityDiscoveredEvent extends CustomEvent {
 export default class Controller extends EventTarget {
   connected = false;
   entities = {};
-  #fetchOptions = null;
+  #EventSource;
+  #fetch;
 
-  constructor(host, fetchOptions = {}) {
+  constructor(host, {CustomEventSource, customFetch} = {}) {
     super();
     this.host = host;
-    this.#fetchOptions = Object.assign({}, fetchOptions);
+    this.#EventSource = CustomEventSource || globalThis.EventSource;
+    this.#fetch = customFetch || globalThis.fetch;
   }
 
   connect() {
     if (this.connected || this.connecting) {
       return;
     }
-    const eventSource = new EventSource(`http://${this.host}/events`);
+    const eventSource = new this.#EventSource(`http://${this.host}/events`);
     eventSource.addEventListener("state", this.#onEventSourceStateMessage);
     eventSource.addEventListener("open", this.#onEventSourceConnected);
     eventSource.addEventListener("error", this.#onEventSourceError);
     this.eventSource = eventSource;
     this.connecting = true;
-  }
-
-  #fetch(url, fetchOptions = {}) {
-    return fetch(url, Object.assign({}, this.#fetchOptions, fetchOptions));
   }
 
   async post(path, query) {
