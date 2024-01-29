@@ -46,13 +46,13 @@ export default class Controller extends EventTarget {
     const url = new URL(path, `http://${this.host}`);
     url.search = new URLSearchParams(query).toString();
 
-    return this.#fetch(url, { method: 'POST' });
+    return this.#fetch.call(undefined, url, { method: 'POST' });
   }
 
   async get(path) {
     const url = new URL(path, `http://${this.host}`);
 
-    const response = await this.#fetch(url);
+    const response = await this.#fetch.call(undefined, url);
     if (!response.ok) {
       return response;
     }
