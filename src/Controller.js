@@ -18,11 +18,11 @@ export default class Controller extends EventTarget {
   #EventSource;
   #fetch;
 
-  constructor(host, {CustomEventSource, customFetch} = {}) {
+  constructor(host, {EventSource, fetch} = {}) {
     super();
     this.host = host;
-    this.#EventSource = CustomEventSource || globalThis.EventSource;
-    this.#fetch = customFetch || globalThis.fetch;
+    this.#EventSource = EventSource || globalThis.EventSource;
+    this.#fetch = fetch || globalThis.fetch;
   }
 
   connect() {

@@ -40,7 +40,7 @@ const { default: Controller }  = await import('../Controller');
 
 const defaultHost = 'localhost';
 function createController(host = defaultHost) {
-  return new Controller(host, {CustomEventSource: EventSourceMock, customFetch: fetchMock});
+  return new Controller(host, {EventSource: EventSourceMock, fetch: fetchMock});
 }
 
 test('it should create an event source connection', () => {
