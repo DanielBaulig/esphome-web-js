@@ -1,4 +1,3 @@
-import fetch from './fetch';
 import createEntity from './entities/createEntity'
 
 export class EntityUpdateEvent extends CustomEvent {
