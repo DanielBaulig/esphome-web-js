@@ -1,6 +1,6 @@
 {
   "name": "esphome-web",
-  "private": true,
+  "version": "0.1.0",
   "description": "An implemenation of the ESPhome web server API",
   "main": "index.js",
   "scripts": {
