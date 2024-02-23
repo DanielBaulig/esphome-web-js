@@ -30,8 +30,8 @@ export default class Controller extends EventTarget {
       return;
     }
     const eventSource = new this.#EventSource(`http://${this.host}/events`);
-    eventSource.addEventListener("log", this.#onActivity);
-    eventSource.addEventListener("ping", this.#onActivity);
+    eventSource.addEventListener("log", this.#onEventSourceLogMessage);
+    eventSource.addEventListener("ping", this.#onEventSourcePingMessage);
     eventSource.addEventListener("state", this.#onEventSourceStateMessage);
     eventSource.addEventListener("open", this.#onEventSourceConnected);
     eventSource.addEventListener("error", this.#onEventSourceError);
@@ -85,12 +85,15 @@ export default class Controller extends EventTarget {
 
   #onEventSourceStateMessage = (event) => {
     const json = JSON.parse(event.data);
-    this.#onActivity();
     this.#updateEntity(json);
   }
 
-  #onActivity = () => {
-    this.dispatchEvent(new Event('activity'));
+  #onEventSourcePingMessage = (event) => {
+    this.dispatchEvent(new CustomEvent('ping', { detail: { data: event.data } }));
+  }
+
+  #onEventSourceLogMessage = (event) => {
+    this.dispatchEvent(new CustomEvent('log', { detail: { data: event.data } }));
   }
 
   #onEventSourceError = (event) => {
@@ -103,8 +106,8 @@ export default class Controller extends EventTarget {
       return;
     }
     const eventSource = this.eventSource;
-    eventSource.removeEventListener("ping", this.#onActivity);
-    eventSource.removeEventListener("log", this.#onActivity);
+    eventSource.removeEventListener("ping", this.#onEventSourcePingMessage);
+    eventSource.removeEventListener("log", this.#onEventSourceLogMessage);
     eventSource.removeEventListener("state", this.#onEventSourceStateMessage);
     eventSource.removeEventListener("open", this.#onEventSourceConnected);
     eventSource.removeEventListener("error", this.#onEventSourceError);
