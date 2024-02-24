@@ -37,6 +37,8 @@ export default class Controller extends EventTarget {
     eventSource.addEventListener("error", this.#onEventSourceError);
     this.eventSource = eventSource;
     this.connecting = true;
+
+    this.dispatchEvent(new Event('connecting'));
   }
 
   async post(path, query) {
