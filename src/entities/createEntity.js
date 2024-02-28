@@ -8,6 +8,7 @@ import SwitchEntity from './SwitchEntity';
 import CoverEntity from './CoverEntity';
 import FanEntity from './FanEntity';
 import SensorEntity from './SensorEntity';
+import TextSensorEntity from './TextSensorEntity';
 
 const entityTypeMap = {
   'binary_sensor': BinarySensorEntity,
@@ -19,6 +20,7 @@ const entityTypeMap = {
   'cover': CoverEntity,
   'fan': FanEntity,
   'sensor': SensorEntity,
+  'text_sensor': TextSensorEntity,
 }
 
 
