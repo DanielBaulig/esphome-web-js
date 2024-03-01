@@ -10,6 +10,8 @@ import FanEntity from './FanEntity';
 import SensorEntity from './SensorEntity';
 import TextSensorEntity from './TextSensorEntity';
 import TextEntity from './TextEntity';
+import LockEntity from './LockEntity';
+import ClimateEntity from './ClimateEntity';
 
 const entityTypeMap = {
   'binary_sensor': BinarySensorEntity,
@@ -23,6 +25,8 @@ const entityTypeMap = {
   'sensor': SensorEntity,
   'text_sensor': TextSensorEntity,
   'text': TextEntity,
+  'lock': LockEntity,
+  'climate': ClimateEntity,
 }
 
 
